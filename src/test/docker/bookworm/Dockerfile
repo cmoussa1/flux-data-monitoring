@@ -17,5 +17,8 @@ RUN \
     && sudo adduser $USER sudo ; \
  fi
 
+# create flux directory inside /var/log/
+RUN mkdir /var/log/flux/ && chmod 755 /var/log/flux/ && chown $USER /var/log/flux/
+
 USER $USER
 WORKDIR /home/$USER

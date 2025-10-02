@@ -244,7 +244,7 @@ def create_job_dicts(jobs) -> list:
             rec["event"]["duration_seconds"] = round(
                 job.get("t_inactive") - job.get("t_run"), 1
             )
-            rec["event"]["duration"] = rec["event"]["duration_seconds"] * 10**9
+            rec["event"]["duration"] = rec["event"]["duration_seconds"] * 10 ** 9
 
         if job.get("nnodes") is not None and job.get("ntasks") is not None:
             # compute number of processes * number of nodes
@@ -308,29 +308,27 @@ def main():
 
     jobs = fetch_new_jobs(args.since)
     job_records = create_job_dicts(jobs)
-    for job in job_records:
-        print(f"job: {job}")
 
-    # if args.output_file is None:
-    #     filename = "flux_jobs.ndjson"
-    # else:
-    #     filename = args.output_file
-    # write_to_file(job_records, filename)
+    if args.output_file is None:
+        filename = "flux_jobs.ndjson"
+    else:
+        filename = args.output_file
+    write_to_file(job_records, filename)
 
-    # try:
-    #     # extract timestamp of the most recently submitted job
-    #     recent_job_timestamp = job_records[-1]["job"]["t_inactive"]
-    # except (IndexError, KeyError, TypeError):
-    #     # default to just writing current time
-    #     recent_job_timestamp = time.time()
-    # # write SUCCESS timestamp
-    # try:
-    #     with open(FLUX_TIMESTAMP_FILE, "w") as fp:
-    #         # write the timestamp of the most recently submitted job
-    #         fp.write(f"{recent_job_timestamp}")
-    # except Exception as exc:
-    #     syslog.syslog(f"error writing timestamp of last seen job: {exc}")
-    #     sys.exit(1)
+    try:
+        # extract timestamp of the most recently submitted job
+        recent_job_timestamp = job_records[-1]["job"]["t_inactive"]
+    except (IndexError, KeyError, TypeError):
+        # default to just writing current time
+        recent_job_timestamp = time.time()
+    # write SUCCESS timestamp
+    try:
+        with open(FLUX_TIMESTAMP_FILE, "w") as fp:
+            # write the timestamp of the most recently submitted job
+            fp.write(f"{recent_job_timestamp}")
+    except Exception as exc:
+        syslog.syslog(f"error writing timestamp of last seen job: {exc}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
