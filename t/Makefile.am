@@ -3,7 +3,8 @@ AM_LDFLAGS = \
 
 # This list is included in both TESTS and dist_check_SCRIPTS.
 TESTSCRIPTS = \
-	t1001-elastic-basic.t
+	t1001-elastic-basic.t \
+	t1002-elastic-job-states.t
 
 dist_check_SCRIPTS = \
 	$(TESTSCRIPTS) \
